@@ -1,8 +1,8 @@
 import type { Config } from "tailwindcss";
 
-
 const config: Config = {
-  
+  darkMode: "class", // <-- Added for dark mode support
+
   important: true, // Applies !important globally
 
   content: [
@@ -13,6 +13,7 @@ const config: Config = {
   ],
 
   plugins: [
+    require("tailwindcss-animate"), // <-- Added animation plugin
   ],
 
   theme: {
