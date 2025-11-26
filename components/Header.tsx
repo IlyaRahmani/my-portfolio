@@ -33,13 +33,13 @@ export default function Header() {
           href="/"
           className="text-2xl font-semibold text-blue-600 dark:text-blue-300"
         >
-          MyPortfolio
+          Ilya Portfolio
         </Link>
 
         {/* Buttons */}
         <div className="flex items-center gap-4">
 
-          <AppButton type="primary">Home</AppButton>
+          <AppButton type="primary">About Me</AppButton>
           <AppButton type="secondary">Projects</AppButton>
           <AppButton type="secondary">Contact</AppButton>
 
