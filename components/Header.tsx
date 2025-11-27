@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sun, Moon, User } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import Link from "next/link";
+
 import AppButton from "@/components/AppButton";
-import ProfileSheet from "./ProfileSheet";
+import ProfileSheet from "@/components/ProfileSheet";
+import MenuBar from "@/components/MenuBar";
+import MenuSheet from "@/components/MenuSheet";
 
 export default function Header() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -20,6 +23,7 @@ export default function Header() {
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
+
     localStorage.setItem("theme", newTheme);
     document.documentElement.classList.toggle("dark");
   };
@@ -28,7 +32,7 @@ export default function Header() {
     <header className="w-full sticky top-0 z-50 bg-white/70 dark:bg-black/40 backdrop-blur-md shadow">
       <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-4">
 
-        {/* Logo */}
+        {/* ---------- LOGO ---------- */}
         <Link
           href="/"
           className="text-2xl font-semibold text-blue-600 dark:text-blue-300"
@@ -36,21 +40,29 @@ export default function Header() {
           Ilya Portfolio
         </Link>
 
-        {/* Buttons */}
+        {/* ---------- RIGHT SIDE ---------- */}
         <div className="flex items-center gap-4">
 
-          <AppButton type="primary">About Me</AppButton>
-          <AppButton type="secondary">Projects</AppButton>
-          <AppButton type="secondary">Contact</AppButton>
+          {/* DESKTOP MENU */}
+          <div className="hidden md:flex">
+            <MenuBar />
+          </div>
 
+          {/* MOBILE MENU */}
+          <div className="md:hidden ">
+            <MenuSheet />
+          </div>
+
+          {/* THEME BUTTON */}
           <AppButton
             type="icon"
             onClick={toggleTheme}
-            icon={theme === "light" ? <Moon size={25} /> : <Sun size={25} />}
+            icon={theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
             ariaLabel="Toggle Theme"
           />
-          <ProfileSheet />
 
+          {/* PROFILE SHEET */}
+          <ProfileSheet />
         </div>
       </div>
     </header>
