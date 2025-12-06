@@ -11,7 +11,7 @@ export default function Hero() {
       {/* PHOTO */}
       <div className="relative w-48 h-48 md:w-64 md:h-64">
         <Image
-          src="/me.jpg"     // <-- replace with your real photo
+          src="/me.png"     // <-- replace with your real photo
           alt="Ilya"
           fill
           className="object-cover rounded-full shadow-2xl"
@@ -25,29 +25,29 @@ export default function Hero() {
         </h1>
 
         <h2 className="text-xl md:text-2xl font-medium text-neutral-600 dark:text-neutral-300">
-          Full Stack developer • Next.js
+          Full Stack Web Developer • Next.js
         </h2>
 
         <p className="max-w-lg text-neutral-600 dark:text-neutral-400">
           I build clean, modern and responsive web applications using 
-          React, Next.js, Tailwind CSS and TypeScript.
+           Next.js, Tailwind CSS and TypeScript.
         </p>
 
         {/* CTA BUTTONS */}
         <div className="flex gap-4 justify-center md:justify-start mt-4">
-          <AppButton type="primary">Contact Me</AppButton>
-          <AppButton type="secondary">View Projects</AppButton>
+          <AppButton type="primary">{`Hire Me >`}</AppButton>
+          <AppButton type="secondary">My Team</AppButton>
         </div>
 
         {/* SOCIAL ICONS */}
         <div className="flex gap-4 justify-center md:justify-start mt-4">
-          <a href="https://github.com" target="_blank">
+          <a href="https://github.com/IlyaRahmani" target="_blank">
             <Github className="w-6 h-6 hover:text-blue-600" />
           </a>
           <a href="https://linkedin.com" target="_blank">
             <Linkedin className="w-6 h-6 hover:text-blue-600" />
           </a>
-          <a href="mailto:you@example.com">
+          <a href="mailto:eiliarhmani1177@gmail.com">
             <Mail className="w-6 h-6 hover:text-blue-600" />
           </a>
         </div>
