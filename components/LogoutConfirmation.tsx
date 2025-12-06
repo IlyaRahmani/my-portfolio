@@ -31,7 +31,6 @@ export default function LogoutConfirmation({
         <AppButton
           type="secondary"
           className={
-            triggerClassName ||
             "w-full py-3 text-lg text-red-600 dark:text-red-600 rounded-xl shadow hover:shadow-lg"
           }
         >

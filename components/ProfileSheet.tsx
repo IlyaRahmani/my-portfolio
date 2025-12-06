@@ -34,7 +34,19 @@ export default function ProfileSheet() {
       </SheetTrigger>
 
       {/* Main Sheet */}
-      <SheetContent side="right" className="p-6">
+      <SheetContent 
+        side="right" 
+        className="
+       bg-white/10!
+       !dark:bg-black/10
+       backdrop-blur-2xl!
+       border-white/20!
+       !dark:border-white/10
+       border-r
+       duration-700
+       ease-[cubic-bezier(0.22,1,0.36,1)]
+        "
+        >
         <SheetHeader>
           <SheetTitle className="text-center"></SheetTitle>
         </SheetHeader>

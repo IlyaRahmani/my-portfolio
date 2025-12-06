@@ -29,7 +29,13 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full sticky top-0 z-50 bg-white/70 dark:bg-black/40 backdrop-blur-md shadow">
+    <header className="
+  sticky top-0 z-50 
+  bg-white/10 dark:bg-black/10 
+  backdrop-blur-xl 
+  border-b border-white/20 dark:border-white/10 
+  shadow-lg
+">
       <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-4">
 
         {/* ---------- LOGO ---------- */}
@@ -44,9 +50,9 @@ export default function Header() {
         <div className="flex items-center gap-4">
 
           {/* DESKTOP MENU */}
-<div className="hidden md:flex">
-  <MenuBar variant="header" />
-</div>
+        <div className="hidden md:flex">
+           <MenuBar variant="header" />
+        </div>
 
           {/* MOBILE MENU */}
           <div className="md:hidden ">
