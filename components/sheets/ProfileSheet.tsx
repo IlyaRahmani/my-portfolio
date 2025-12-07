@@ -18,21 +18,18 @@ import { User as UserIcon } from "lucide-react";
 
 import AppButton from "@/components/AppButton";
 
-
 export default function ProfileSheet() {
   const [open, setOpen] = useState(false);
-
   const [user, setUser] = useState<SupabaseUser | null>(null);
 
   const supabase = createClient();
 
-  // Load user on mount
+  // Load user on mount + listen for changes
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null);
     });
 
-    // Listen for login/logout events
     const { data: listener } = supabase.auth.onAuthStateChange(() => {
       supabase.auth.getUser().then(({ data }) => {
         setUser(data?.user || null);
@@ -41,6 +38,13 @@ export default function ProfileSheet() {
 
     return () => listener?.subscription.unsubscribe();
   }, []);
+
+  // Automatically close sheet when user logs in
+  useEffect(() => {
+    if (user) {
+      setOpen(false);
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -52,10 +56,10 @@ export default function ProfileSheet() {
       {/* OPEN BUTTON */}
       <SheetTrigger asChild>
         <AppButton
-  type="icon"
-  icon={<UserIcon size={23} />}
-  ariaLabel="Profile"
-/>
+          type="icon"
+          icon={<UserIcon size={23} />}
+          ariaLabel="Profile"
+        />
       </SheetTrigger>
 
       {/* SHEET CONTENT */}
@@ -66,7 +70,7 @@ export default function ProfileSheet() {
 
         <div className="mt-6 flex flex-col gap-4">
 
-          {/* If NOT logged in → show login + signup */}
+          {/* Not logged in → show Login + Signup */}
           {!user && (
             <>
               <Link href="/login" onClick={() => setOpen(false)}>
@@ -83,7 +87,7 @@ export default function ProfileSheet() {
             </>
           )}
 
-          {/* If logged in → show logout */}
+          {/* Logged in → show Dashboard + Logout */}
           {user && (
             <>
               <div className="text-lg font-medium">
@@ -91,6 +95,12 @@ export default function ProfileSheet() {
                 <br />
                 <span className="text-blue-600">{user.email}</span>
               </div>
+
+              <Link href="/dashboard" onClick={() => setOpen(false)}>
+                <AppButton type="primary" className="w-full py-3 text-lg">
+                  Dashboard
+                </AppButton>
+              </Link>
 
               <AppButton
                 type="secondary"
