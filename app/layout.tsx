@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Header from "../components/sections/Header";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Ilya's Portfolio",
@@ -14,13 +13,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
     <html lang="en">
       <body>
         <Header />
         {children}
       </body>
     </html>
-    </ClerkProvider>
   );
 }

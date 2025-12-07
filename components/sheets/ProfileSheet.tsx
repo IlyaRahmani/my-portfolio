@@ -9,28 +9,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-} from "@clerk/nextjs";
-
-import { useUser } from "@clerk/nextjs";
 import { User } from "lucide-react";
 import Link from "next/link";
 
 import AppButton from "../AppButton";
 import LogoutConfirmation from "../LogoutConfirmation";
+import useUser from "@/hooks/useUser";
 
 export default function ProfileSheet() {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      
-            <SheetTrigger asChild>
+      <SheetTrigger asChild>
         <AppButton
           type="icon"
           icon={<User size={25} />}
@@ -56,44 +48,51 @@ export default function ProfileSheet() {
         </SheetHeader>
 
         <div className="mt-6 flex flex-col gap-6">
+          {/* LOADING */}
+          {loading && (
+            <div className="flex items-center justify-center py-20">
+              <p className="text-lg">Loading...</p>
+            </div>
+          )}
 
           {/* ----------- GUEST VIEW ----------- */}
-          <SignedOut>
+          {!loading && !user && (
             <div className="flex flex-col items-center gap-4">
               <User size={60} className="text-primary" />
               <h1 className="text-xl font-semibold">Guest Account</h1>
 
-              <SignUpButton>
+              <Link href="/signup" className="w-full">
                 <AppButton
                   type="primary"
                   className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
                 >
                   Sign up
                 </AppButton>
-              </SignUpButton>
+              </Link>
 
-              <SignInButton>
+              <Link href="/login" className="w-full">
                 <AppButton
                   type="primary"
                   className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
                 >
                   Login
                 </AppButton>
-              </SignInButton>
+              </Link>
             </div>
-          </SignedOut>
+          )}
 
           {/* ----------- LOGGED IN VIEW ----------- */}
-          <SignedIn>
+          {!loading && user && (
             <div className="flex flex-col items-center gap-4">
-              
               <img
-                src={user?.imageUrl || ""}
+                src={user.user_metadata?.avatar_url || "/default-avatar.png"}
                 alt="Profile"
                 className="w-40 h-40 rounded-full object-cover border"
               />
 
-              <h1 className="text-xl font-semibold">{user?.fullName}</h1>
+              <h1 className="text-xl font-semibold">
+                {user.user_metadata?.full_name || "User"}
+              </h1>
 
               <Link
                 href="/profile"
@@ -108,7 +107,6 @@ export default function ProfileSheet() {
                 </AppButton>
               </Link>
 
-              {/* DASHBOARD — CLOSE SHEET ON CLICK */}
               <Link
                 href="/dashboard"
                 className="w-full"
@@ -125,9 +123,8 @@ export default function ProfileSheet() {
               <LogoutConfirmation
                 triggerClassName="w-full py-3 text-lg text-red-600 rounded-xl shadow"
               />
-
             </div>
-          </SignedIn>
+          )}
 
           {/* Settings */}
           <AppButton
