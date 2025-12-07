@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { Github, Linkedin, Mail, Send } from "lucide-react";
 import AppButton from "@/components/AppButton";
+import Link from "next/link";
+
 
 export default function Hero() {
   return (
@@ -35,8 +37,22 @@ export default function Hero() {
 
         {/* CTA BUTTONS */}
         <div className="flex gap-4 justify-center md:justify-start mt-4">
-          <AppButton type="primary">{`Hire Me >`}</AppButton>
-          <AppButton type="secondary">My Team</AppButton>
+          <Link href="/hire-me" >
+              <AppButton
+                  type="primary"
+                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
+                >
+                  {`Hire Me >`}
+              </AppButton>
+            </Link>
+            <Link href="/my-team" >
+              <AppButton
+                  type="secondary"
+                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
+                >
+                  My Team
+              </AppButton>
+            </Link>
         </div>
 
         {/* SOCIAL ICONS */}
