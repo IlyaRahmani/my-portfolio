@@ -1,140 +1,109 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { createClient } from "@/utils/supabase/client";
+
 import {
   Sheet,
+  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetFooter,
 } from "@/components/ui/sheet";
 
-import { User } from "lucide-react";
-import Link from "next/link";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { User as UserIcon } from "lucide-react";
 
-import AppButton from "../AppButton";
-import LogoutConfirmation from "../LogoutConfirmation";
-import useUser from "@/hooks/useUser";
+import AppButton from "@/components/AppButton";
+
 
 export default function ProfileSheet() {
-  const { user, loading } = useUser();
   const [open, setOpen] = useState(false);
+
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+
+  const supabase = createClient();
+
+  // Load user on mount
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data?.user || null);
+    });
+
+    // Listen for login/logout events
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      supabase.auth.getUser().then(({ data }) => {
+        setUser(data?.user || null);
+      });
+    });
+
+    return () => listener?.subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setOpen(false);
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
+      {/* OPEN BUTTON */}
       <SheetTrigger asChild>
         <AppButton
-          type="icon"
-          icon={<User size={25} />}
-          ariaLabel="Profile"
-        />
+  type="icon"
+  icon={<UserIcon size={23} />}
+  ariaLabel="Profile"
+/>
       </SheetTrigger>
 
-      <SheetContent
-        side="right"
-        className="
-          bg-white/10 
-          dark:bg-black/10
-          backdrop-blur-2xl
-          border-white/20 
-          dark:border-white/10
-          border-l
-          duration-700
-          ease-[cubic-bezier(0.22,1,0.36,1)]
-        "
-      >
+      {/* SHEET CONTENT */}
+      <SheetContent className="w-[85%] sm:max-w-sm">
         <SheetHeader>
-          <SheetTitle></SheetTitle>
+          <SheetTitle className="text-xl">My Account</SheetTitle>
         </SheetHeader>
 
-        <div className="mt-6 flex flex-col gap-6">
-          {/* LOADING */}
-          {loading && (
-            <div className="flex items-center justify-center py-20">
-              <p className="text-lg">Loading...</p>
-            </div>
-          )}
+        <div className="mt-6 flex flex-col gap-4">
 
-          {/* ----------- GUEST VIEW ----------- */}
-          {!loading && !user && (
-            <div className="flex flex-col items-center gap-4">
-              <User size={60} className="text-primary" />
-              <h1 className="text-xl font-semibold">Guest Account</h1>
-
-              <Link href="/signup" className="w-full">
-                <AppButton
-                  type="primary"
-                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
-                >
-                  Sign up
-                </AppButton>
-              </Link>
-
-              <Link href="/login" className="w-full">
-                <AppButton
-                  type="primary"
-                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
-                >
+          {/* If NOT logged in → show login + signup */}
+          {!user && (
+            <>
+              <Link href="/login" onClick={() => setOpen(false)}>
+                <AppButton type="primary" className="w-full py-3 text-lg">
                   Login
                 </AppButton>
               </Link>
-            </div>
-          )}
 
-          {/* ----------- LOGGED IN VIEW ----------- */}
-          {!loading && user && (
-            <div className="flex flex-col items-center gap-4">
-              <img
-                src={user.user_metadata?.avatar_url || "/default-avatar.png"}
-                alt="Profile"
-                className="w-40 h-40 rounded-full object-cover border"
-              />
-
-              <h1 className="text-xl font-semibold">
-                {user.user_metadata?.full_name || "User"}
-              </h1>
-
-              <Link
-                href="/profile"
-                className="w-full"
-                onClick={() => setOpen(false)}
-              >
-                <AppButton
-                  type="secondary"
-                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
-                >
-                  Profile
+              <Link href="/signup" onClick={() => setOpen(false)}>
+                <AppButton type="secondary" className="w-full py-3 text-lg">
+                  Sign Up
                 </AppButton>
               </Link>
-
-              <Link
-                href="/dashboard"
-                className="w-full"
-                onClick={() => setOpen(false)}
-              >
-                <AppButton
-                  type="primary"
-                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
-                >
-                  Dashboard
-                </AppButton>
-              </Link>
-
-              <LogoutConfirmation
-                triggerClassName="w-full py-3 text-lg text-red-600 rounded-xl shadow"
-              />
-            </div>
+            </>
           )}
 
-          {/* Settings */}
-          <AppButton
-            type="secondary"
-            className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
-          >
-            Settings
-          </AppButton>
+          {/* If logged in → show logout */}
+          {user && (
+            <>
+              <div className="text-lg font-medium">
+                Logged in as:
+                <br />
+                <span className="text-blue-600">{user.email}</span>
+              </div>
 
+              <AppButton
+                type="secondary"
+                className="w-full py-3 text-lg text-red-600"
+                onClick={handleLogout}
+              >
+                Log Out
+              </AppButton>
+            </>
+          )}
         </div>
+
+        <SheetFooter />
       </SheetContent>
     </Sheet>
   );
