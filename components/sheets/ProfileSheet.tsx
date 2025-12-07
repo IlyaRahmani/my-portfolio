@@ -95,6 +95,19 @@ export default function ProfileSheet() {
 
               <h1 className="text-xl font-semibold">{user?.fullName}</h1>
 
+              <Link
+                href="/profile"
+                className="w-full"
+                onClick={() => setOpen(false)}
+              >
+                <AppButton
+                  type="secondary"
+                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
+                >
+                  Profile
+                </AppButton>
+              </Link>
+
               {/* DASHBOARD — CLOSE SHEET ON CLICK */}
               <Link
                 href="/dashboard"
