@@ -39,29 +39,30 @@ export default function LogoutConfirmation({
       </DialogTrigger>
 
       {/* Confirmation popup */}
-      <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <DialogTitle>Are you sure you want to log out?</DialogTitle>
-        </DialogHeader>
+      <DialogContent className="w-[90%] max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
+  <DialogHeader>
+    <DialogTitle>Are you sure you want to log out?</DialogTitle>
+  </DialogHeader>
 
-        <DialogFooter className="flex justify-end gap-3">
-          {/* Cancel */}
-          <AppButton type="secondary" onClick={() => setOpen(false)}>
-            Cancel
-          </AppButton>
+  <DialogFooter className="flex justify-end gap-3">
+    {/* Cancel */}
+    <AppButton type="secondary" onClick={() => setOpen(false)}>
+      Cancel
+    </AppButton>
 
-          {/* YES logout */}
-          <AppButton
-            type="primary"
-            className="bg-red-600 text-white"
-            onClick={() => {
-              signOut();
-            }}
-          >
-            Yes, Log out
-          </AppButton>
-        </DialogFooter>
-      </DialogContent>
+    {/* YES logout */}
+    <AppButton
+      type="primary"
+      className="bg-red-600 text-white"
+      onClick={() => {
+        setOpen(false); // auto-close
+        signOut();
+      }}
+    >
+      Yes, Log out
+    </AppButton>
+  </DialogFooter>
+</DialogContent>
     </Dialog>
   );
 }

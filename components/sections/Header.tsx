@@ -5,9 +5,9 @@ import { Sun, Moon } from "lucide-react";
 import Link from "next/link";
 
 import AppButton from "@/components/AppButton";
-import ProfileSheet from "@/components/ProfileSheet";
+import ProfileSheet from "@/components/sheets/ProfileSheet";
 import MenuBar from "@/components/MenuBar";
-import MenuSheet from "@/components/MenuSheet";
+import MenuSheet from "@/components/sheets/MenuSheet";
 
 export default function Header() {
   const [theme, setTheme] = useState<"light" | "dark">("light");

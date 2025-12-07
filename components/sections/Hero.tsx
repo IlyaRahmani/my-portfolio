@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, Send } from "lucide-react";
 import AppButton from "@/components/AppButton";
 
 export default function Hero() {
@@ -11,7 +11,7 @@ export default function Hero() {
       {/* PHOTO */}
       <div className="relative w-48 h-48 md:w-64 md:h-64">
         <Image
-          src="/me.png"     // <-- replace with your real photo
+          src="/me.png"
           alt="Ilya"
           fill
           className="object-cover rounded-full shadow-2xl"
@@ -30,7 +30,7 @@ export default function Hero() {
 
         <p className="max-w-lg text-neutral-600 dark:text-neutral-400">
           I build clean, modern and responsive web applications using 
-           Next.js, Tailwind CSS and TypeScript.
+          Next.js, Tailwind CSS and TypeScript.
         </p>
 
         {/* CTA BUTTONS */}
@@ -41,12 +41,24 @@ export default function Hero() {
 
         {/* SOCIAL ICONS */}
         <div className="flex gap-4 justify-center md:justify-start mt-4">
+
+          {/* Telegram */}
+          <a
+            href="https://t.me/EiliaRH"
+            target="_blank"
+            className="hover:text-blue-600"
+          >
+            <Send className="w-6 h-6" />
+          </a>
+
           <a href="https://github.com/IlyaRahmani" target="_blank">
             <Github className="w-6 h-6 hover:text-blue-600" />
           </a>
+
           <a href="https://linkedin.com" target="_blank">
             <Linkedin className="w-6 h-6 hover:text-blue-600" />
           </a>
+
           <a href="mailto:eiliarhmani1177@gmail.com">
             <Mail className="w-6 h-6 hover:text-blue-600" />
           </a>

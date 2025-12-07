@@ -1,6 +1,6 @@
 "use client";
 
-import MenuBar from "./MenuBar";
+import MenuBar from "../MenuBar";
 import {
   Sheet,
   SheetContent,
@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
-import AppButton from "./AppButton";
+import AppButton from "../AppButton";
 
 export default function MenuSheet() {
   return (

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -15,17 +18,19 @@ import {
 
 import { useUser } from "@clerk/nextjs";
 import { User } from "lucide-react";
+import Link from "next/link";
 
-import AppButton from "./AppButton";
-import LogoutConfirmation from "./LogoutConfirmation";
+import AppButton from "../AppButton";
+import LogoutConfirmation from "../LogoutConfirmation";
 
 export default function ProfileSheet() {
   const { user } = useUser();
+  const [open, setOpen] = useState(false);
 
   return (
-    <Sheet>
-      {/* Trigger button */}
-      <SheetTrigger asChild>
+    <Sheet open={open} onOpenChange={setOpen}>
+      
+            <SheetTrigger asChild>
         <AppButton
           type="icon"
           icon={<User size={25} />}
@@ -33,27 +38,26 @@ export default function ProfileSheet() {
         />
       </SheetTrigger>
 
-      {/* Main Sheet */}
-      <SheetContent 
-        side="right" 
+      <SheetContent
+        side="right"
         className="
-       bg-white/10!
-       !dark:bg-black/10
-       backdrop-blur-2xl!
-       border-white/20!
-       !dark:border-white/10
-       border-r
-       duration-700
-       ease-[cubic-bezier(0.22,1,0.36,1)]
+          bg-white/10 
+          dark:bg-black/10
+          backdrop-blur-2xl
+          border-white/20 
+          dark:border-white/10
+          border-l
+          duration-700
+          ease-[cubic-bezier(0.22,1,0.36,1)]
         "
-        >
+      >
         <SheetHeader>
-          <SheetTitle className="text-center"></SheetTitle>
+          <SheetTitle></SheetTitle>
         </SheetHeader>
 
         <div className="mt-6 flex flex-col gap-6">
 
-          {/* ------------------- GUEST VIEW ------------------- */}
+          {/* ----------- GUEST VIEW ----------- */}
           <SignedOut>
             <div className="flex flex-col items-center gap-4">
               <User size={60} className="text-primary" />
@@ -79,9 +83,10 @@ export default function ProfileSheet() {
             </div>
           </SignedOut>
 
-          {/* ------------------- LOGGED IN VIEW ------------------- */}
+          {/* ----------- LOGGED IN VIEW ----------- */}
           <SignedIn>
             <div className="flex flex-col items-center gap-4">
+              
               <img
                 src={user?.imageUrl || ""}
                 alt="Profile"
@@ -90,26 +95,35 @@ export default function ProfileSheet() {
 
               <h1 className="text-xl font-semibold">{user?.fullName}</h1>
 
-              <AppButton
-                type="primary"
-                className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
+              {/* DASHBOARD — CLOSE SHEET ON CLICK */}
+              <Link
+                href="/dashboard"
+                className="w-full"
+                onClick={() => setOpen(false)}
               >
-                Dashboard
-              </AppButton>
-              
-              <LogoutConfirmation triggerClassName="w-full py-3 text-lg text-red-600 rounded-xl shadow" />
+                <AppButton
+                  type="primary"
+                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
+                >
+                  Dashboard
+                </AppButton>
+              </Link>
+
+              <LogoutConfirmation
+                triggerClassName="w-full py-3 text-lg text-red-600 rounded-xl shadow"
+              />
 
             </div>
           </SignedIn>
 
-          {/* Settings button (always visible) */}
+          {/* Settings */}
           <AppButton
             type="secondary"
             className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
           >
             Settings
           </AppButton>
-          
+
         </div>
       </SheetContent>
     </Sheet>
