@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabaseClient";
 import AppButton from "@/components/AppButton";
 
 export default function LoginPage() {
@@ -12,16 +12,16 @@ export default function LoginPage() {
   const doLogin = async () => {
     setError("");
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error: loginError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      window.location.href = "/dashboard";
+    if (loginError) {
+      setError(loginError.message);
+      return;
     }
+    window.location.href = "/";
   };
 
   return (

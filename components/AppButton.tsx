@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { cn } from "@/lib/utils"; // helper to join Tailwind classes
+import { cn } from "@/lib/utils";
 
 type AppButtonProps = {
   type?: "primary" | "secondary" | "icon";
@@ -10,6 +10,7 @@ type AppButtonProps = {
   className?: string;
   icon?: ReactNode;
   ariaLabel?: string;
+  disabled?: boolean;
 };
 
 export default function AppButton({
@@ -19,15 +20,14 @@ export default function AppButton({
   icon,
   onClick,
   ariaLabel,
+  disabled = false,
 }: AppButtonProps) {
-  // Base styles for all buttons
-  const base = cn (
-    "transition-all duration-200 ease-in-out", // smooth transition
+  const base = cn(
+    "transition-all duration-200 ease-in-out",
     "rounded-lg flex items-center justify-center",
-    "focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-blue-500" // focus ring
+    "focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-blue-500"
   );
 
-  // Variant styles
   const styles = {
     primary:
       "bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-500 dark:hover:bg-blue-600 dark:active:bg-blue-700",
@@ -37,11 +37,24 @@ export default function AppButton({
       "p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 active:bg-gray-400 dark:hover:bg-gray-600 dark:active:bg-gray-500",
   };
 
+  const disabledStyles =
+    "opacity-50 cursor-not-allowed pointer-events-none";
+
   return (
     <button
       onClick={onClick}
-      className={cn(base, type === "icon" ? styles.icon : type === "secondary" ? styles.secondary : styles.primary, className)}
+      disabled={disabled}
       aria-label={ariaLabel}
+      className={cn(
+        base,
+        type === "icon"
+          ? styles.icon
+          : type === "secondary"
+          ? styles.secondary
+          : styles.primary,
+        disabled && disabledStyles,
+        className
+      )}
     >
       {icon ? icon : children}
     </button>

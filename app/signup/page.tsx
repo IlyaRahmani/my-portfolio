@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabaseClient";
 import AppButton from "@/components/AppButton";
 
 export default function SignupPage() {
@@ -9,23 +9,30 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleSignup = async () => {
+    if (!email || !password) return;
+
     setLoading(true);
     setError("");
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error: signupError } = await supabase.auth.signUp({
       email,
       password,
     });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      alert("Check your email to confirm your account.");
+    if (signupError) {
+      setError(signupError.message);
+      setLoading(false);
+      return;
     }
 
+    // SUCCESS
+    setSuccess(true);
     setLoading(false);
+
+    window.location.href = "/";
   };
 
   return (
@@ -48,8 +55,18 @@ export default function SignupPage() {
 
       {error && <p className="text-red-600 mb-2">{error}</p>}
 
-      <AppButton type="primary" onClick={handleSignup} >
-        Sign Up
+      {success && (
+        <p className="text-green-600 mb-2">
+          ✅ Account created. Check your email to confirm.
+        </p>
+      )}
+
+      <AppButton
+        type="primary"
+        onClick={handleSignup}
+        disabled={loading}
+      >
+        {loading ? "Creating..." : "Sign Up"}
       </AppButton>
     </div>
   );

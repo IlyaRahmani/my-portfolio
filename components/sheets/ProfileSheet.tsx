@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/client";
+import { User as UserIcon } from "lucide-react";
+
+import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/lib/useUser";
 
 import {
   Sheet,
@@ -13,37 +16,15 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 
-import type { User as SupabaseUser } from "@supabase/supabase-js";
-import { User as UserIcon } from "lucide-react";
-
 import AppButton from "@/components/AppButton";
 
 export default function ProfileSheet() {
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const user = useUser(); // ✅ single source of truth
 
-  const supabase = createClient();
-
-  // Load user on mount + listen for changes
+  // Close sheet automatically when auth state changes (login/logout)
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data?.user || null);
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange(() => {
-      supabase.auth.getUser().then(({ data }) => {
-        setUser(data?.user || null);
-      });
-    });
-
-    return () => listener?.subscription.unsubscribe();
-  }, []);
-
-  // Automatically close sheet when user logs in
-  useEffect(() => {
-    if (user) {
-      setOpen(false);
-    }
+    if (user) setOpen(false);
   }, [user]);
 
   const handleLogout = async () => {
@@ -53,7 +34,7 @@ export default function ProfileSheet() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      {/* OPEN BUTTON */}
+      {/* Trigger button */}
       <SheetTrigger asChild>
         <AppButton
           type="icon"
@@ -62,15 +43,14 @@ export default function ProfileSheet() {
         />
       </SheetTrigger>
 
-      {/* SHEET CONTENT */}
+      {/* Sheet content */}
       <SheetContent className="w-[85%] sm:max-w-sm">
         <SheetHeader>
           <SheetTitle className="text-xl">My Account</SheetTitle>
         </SheetHeader>
 
         <div className="mt-6 flex flex-col gap-4">
-
-          {/* Not logged in → show Login + Signup */}
+          {/* NOT LOGGED IN */}
           {!user && (
             <>
               <Link href="/login" onClick={() => setOpen(false)}>
@@ -87,18 +67,26 @@ export default function ProfileSheet() {
             </>
           )}
 
-          {/* Logged in → show Dashboard + Logout */}
+          {/* LOGGED IN */}
           {user && (
             <>
               <div className="text-lg font-medium">
                 Logged in as:
                 <br />
-                <span className="text-blue-600">{user.email}</span>
+                <span className="text-blue-600 break-all">
+                  {user.email}
+                </span>
               </div>
 
               <Link href="/dashboard" onClick={() => setOpen(false)}>
                 <AppButton type="primary" className="w-full py-3 text-lg">
                   Dashboard
+                </AppButton>
+              </Link>
+
+              <Link href="/profile" onClick={() => setOpen(false)}>
+                <AppButton type="secondary" className="w-full py-3 text-lg">
+                  Profile
                 </AppButton>
               </Link>
 
