@@ -1,7 +1,7 @@
-"use client"
-import React, { useState, ChangeEvent } from 'react';
-import { Upload, Github, ExternalLink, X } from 'lucide-react';
-import AppButton from '@/components/AppButton';
+"use client";
+import React, { useState, ChangeEvent } from "react";
+import { Upload, Github, ExternalLink, X } from "lucide-react";
+import AppButton from "@/components/AppButton";
 
 interface FormData {
   title: string;
@@ -13,91 +13,111 @@ interface FormData {
 
 export default function AdminProjectsForm() {
   const [formData, setFormData] = useState<FormData>({
-    title: '',
-    description: '',
-    githubLink: '',
-    previewLink: '',
+    title: "",
+    description: "",
+    githubLink: "",
+    previewLink: "",
     image: null,
   });
-  
+
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData(prev => ({
-        ...prev,
-        image: file
-      }));
-      
+      setFormData((prev) => ({ ...prev, image: file }));
+
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
+      reader.onloadend = () => setImagePreview(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
   const handleRemoveImage = () => {
     setImagePreview(null);
-    setFormData(prev => ({ ...prev, image: null }));
+    setFormData((prev) => ({ ...prev, image: null }));
   };
 
- const validateForm = () => {
-  if (!formData.title.trim()) return false;
-  if (!formData.description.trim()) return false;
-  if (!formData.githubLink.trim()) return false;
-  if (!formData.previewLink.trim()) return false;
-  return true;
-};
+  const validateForm = () => {
+    if (!formData.title.trim()) return false;
+    if (!formData.description.trim()) return false;
+    if (!formData.githubLink.trim()) return false;
+    if (!formData.previewLink.trim()) return false;
+    return true;
+  };
 
-const handleSubmit = () => {
-  if (!validateForm()) {
-    alert("Please fill in all required fields.");
-    return;
-  }
+  const handleSubmit = () => {
+    if (!validateForm()) {
+      alert("Please fill in all required fields.");
+      return;
+    }
 
-  console.log("Form submitted:", formData);
-  alert("Form submitted!");
-};
+    console.log("Form submitted:", formData);
+    alert("Form submitted!");
+  };
 
   return (
-    <div className="min-h-screen from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            Create Project
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-100 dark:bg-[#0d0d0d] transition-colors">
+
+      {/* Large, responsive card */}
+      <div
+        className="
+        w-full max-w-3xl 
+        p-10 
+        rounded-2xl 
+        border border-white/20 dark:border-white/10 
+        bg-white/30 dark:bg-black/30 
+        shadow-2xl 
+        backdrop-blur-xl
+        transition-all duration-300
+      "
+      >
+        {/* Header */}
+        <div className="mb-10 text-center">
+          <h1 className="text-4xl font-bold  text-blue-600 dark:text-blue-300">
+            Create New Project
           </h1>
-          <p className="text-slate-600">
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg">
             Add your project details below
           </p>
         </div>
 
-        <div className="space-y-6">
-          {/* Image Upload */}
+        <div className="space-y-8">
+          {/* IMAGE UPLOAD */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
               Project Image
             </label>
-            <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-purple-500 transition-all duration-200 hover:bg-purple-50">
+
+            <div className="
+                border-2 border-dashed 
+                border-gray-300 dark:border-gray-600 
+                rounded-xl 
+                p-6 text-center 
+                hover:border-purple-500 
+                hover:bg-purple-500/10 
+                transition-all
+              ">
               {imagePreview ? (
                 <div className="relative">
-                  <img 
-                    src={imagePreview} 
-                    alt="Preview" 
-                    className="max-h-48 mx-auto rounded-lg shadow-lg object-cover"
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-h-60 mx-auto rounded-xl shadow-xl object-cover"
                   />
                   <button
                     onClick={handleRemoveImage}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors shadow-lg"
+                    className="absolute top-3 right-3 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 shadow-lg transition"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -110,16 +130,16 @@ const handleSubmit = () => {
                     onChange={handleImageChange}
                     className="hidden"
                   />
-                  <div className="flex flex-col items-center space-y-3">
-                    <div className="bg-purple-100 p-4 rounded-full">
-                      <Upload className="w-8 h-8 text-purple-600" />
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="bg-purple-200 dark:bg-purple-900 p-4 rounded-full">
+                      <Upload className="w-8 h-8 text-purple-700 dark:text-purple-300" />
                     </div>
                     <div>
-                      <p className="text-slate-700 font-medium">
-                        Click to upload or drag and drop
+                      <p className="text-gray-800 dark:text-gray-200 font-semibold">
+                        Click to upload or drag & drop
                       </p>
-                      <p className="text-sm text-slate-500 mt-1">
-                        PNG, JPG up to 10MB
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        PNG, JPG, up to 10MB
                       </p>
                     </div>
                   </div>
@@ -128,91 +148,116 @@ const handleSubmit = () => {
             </div>
           </div>
 
-          {/* Title */}
+          {/* TITLE */}
           <div className="space-y-2">
-            <label htmlFor="title" className="block text-sm font-medium text-slate-700">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
               Project Title <span className="text-red-500">*</span>
             </label>
             <input
-              id="title"
-              type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
-              required
-              placeholder="Enter your project title"
-              className="text-black w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+              placeholder="Enter project title"
+              className="
+              w-full px-4 py-3 
+              rounded-xl
+              bg-white dark:bg-black/40
+              border border-gray-300 dark:border-gray-700
+              text-gray-900 dark:text-gray-100
+              focus:ring-2 focus:ring-purple-600
+              outline-none transition-all
+            "
             />
           </div>
 
-          {/* Description */}
+          {/* DESCRIPTION */}
           <div className="space-y-2">
-            <label htmlFor="description" className="block text-sm font-medium text-slate-700">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
               Description <span className="text-red-500">*</span>
             </label>
             <textarea
-              id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              required
               rows={4}
               placeholder="Describe your project..."
-              className="text-black w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none"
+              className="
+              w-full px-4 py-3 
+              rounded-xl
+              bg-white dark:bg-black/40
+              border border-gray-300 dark:border-gray-700
+              text-gray-900 dark:text-gray-100
+              focus:ring-2 focus:ring-purple-600
+              outline-none transition-all
+              resize-none
+            "
             />
           </div>
 
-          {/* GitHub Link */}
+          {/* GITHUB LINK */}
           <div className="space-y-2">
-            <label htmlFor="githubLink" className="block text-sm font-medium text-slate-700">
-              GitHub Repository
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+              GitHub Repository <span className="text-red-500">*</span>
             </label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                <Github className="w-5 h-5 text-slate-400" />
-              </div>
+              <Github className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
               <input
-                id="githubLink"
-                type="url"
                 name="githubLink"
                 value={formData.githubLink}
                 onChange={handleChange}
-                placeholder="https://github.com/username/repo"
-                className="text-black w-full pl-12 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                placeholder="https://github.com/user/repo"
+                className="
+                w-full pl-12 pr-4 py-3 
+                rounded-xl
+                bg-white dark:bg-black/40
+                border border-gray-300 dark:border-gray-700
+                text-gray-900 dark:text-gray-100
+                focus:ring-2 focus:ring-purple-600
+                outline-none transition-all
+              "
               />
             </div>
           </div>
 
-          {/* Preview Link */}
+          {/* PREVIEW LINK */}
           <div className="space-y-2">
-            <label htmlFor="previewLink" className="block text-sm font-medium text-slate-700">
-              Live Preview URL
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+              Live Preview URL <span className="text-red-500">*</span>
             </label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                <ExternalLink className="w-5 h-5 text-slate-400" />
-              </div>
+              <ExternalLink className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
               <input
-                id="previewLink"
-                type="url"
                 name="previewLink"
                 value={formData.previewLink}
                 onChange={handleChange}
                 placeholder="https://your-project.com"
-                className="text-black w-full pl-12 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                className="
+                w-full pl-12 pr-4 py-3 
+                rounded-xl
+                bg-white dark:bg-black/40
+                border border-gray-300 dark:border-gray-700
+                text-gray-900 dark:text-gray-100
+                focus:ring-2 focus:ring-purple-600
+                outline-none transition-all
+              "
               />
             </div>
           </div>
 
-          {/* Submit Button */}
-              <AppButton
-                type="secondary"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 mt-4"
-                onClick={handleSubmit}
-              >
-                Log in
-              </AppButton>
-
+          {/* SUBMIT BUTTON */}
+          <AppButton
+            onClick={handleSubmit}
+            className="
+            w-full 
+            font-semibold 
+            py-4 rounded-xl 
+            transition-all duration-200 
+            shadow-lg hover:shadow-xl 
+            active:scale-[0.98]
+          "
+          >
+            Create Project
+          </AppButton>
         </div>
       </div>
     </div>

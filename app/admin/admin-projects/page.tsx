@@ -1,4 +1,5 @@
 import AppButton from "@/components/AppButton";
+import Projects from "@/components/sections/Projects";
 import Link from "next/link";
 
 export default async function AdminProjectsPage() {
@@ -9,12 +10,14 @@ export default async function AdminProjectsPage() {
       <p>Only admin (you) can see this page.</p>
       <Link href="/admin/projects-form">
           <AppButton
-             type="secondary"
-             className=" bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 mt-4"
+             type="primary"
+             className=" py-3 px-6 mt-4"
               >
               Create Project
             </AppButton>
       </Link>
+
+      <Projects/>
 
     </div>
   );
