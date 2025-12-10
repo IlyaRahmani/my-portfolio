@@ -37,7 +37,7 @@ export default function Hero() {
 
         {/* CTA BUTTONS */}
         <div className="flex gap-4 justify-center md:justify-start mt-4">
-          <Link href="/hire-me" >
+          <Link href="/contant" >
               <AppButton
                   type="primary"
                   className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
@@ -45,14 +45,7 @@ export default function Hero() {
                   {`Hire Me >`}
               </AppButton>
             </Link>
-            <Link href="/my-team" >
-              <AppButton
-                  type="secondary"
-                  className="w-full py-3 text-lg rounded-xl shadow hover:shadow-lg"
-                >
-                  My Team
-              </AppButton>
-            </Link>
+
         </div>
 
         {/* SOCIAL ICONS */}

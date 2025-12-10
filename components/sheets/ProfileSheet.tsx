@@ -44,7 +44,19 @@ export default function ProfileSheet() {
       </SheetTrigger>
 
       {/* Sheet content */}
-      <SheetContent className="w-[85%] sm:max-w-sm">
+      <SheetContent
+  side="right"
+  className="
+    bg-white/10!
+    !dark:bg-black/10
+    backdrop-blur-2xl!
+    border-white/20!
+    !dark:border-white/10
+    border-r
+    duration-700
+    ease-[cubic-bezier(0.22,1,0.36,1)]
+  "
+>        
         <SheetHeader>
           <SheetTitle className="text-xl">My Account</SheetTitle>
         </SheetHeader>
@@ -59,11 +71,6 @@ export default function ProfileSheet() {
                 </AppButton>
               </Link>
 
-              <Link href="/signup" onClick={() => setOpen(false)}>
-                <AppButton type="secondary" className="w-full py-3 text-lg">
-                  Sign Up
-                </AppButton>
-              </Link>
             </>
           )}
 
@@ -77,18 +84,6 @@ export default function ProfileSheet() {
                   {user.email}
                 </span>
               </div>
-
-              <Link href="/dashboard" onClick={() => setOpen(false)}>
-                <AppButton type="primary" className="w-full py-3 text-lg">
-                  Dashboard
-                </AppButton>
-              </Link>
-
-              <Link href="/profile" onClick={() => setOpen(false)}>
-                <AppButton type="secondary" className="w-full py-3 text-lg">
-                  Profile
-                </AppButton>
-              </Link>
 
               <AppButton
                 type="secondary"
