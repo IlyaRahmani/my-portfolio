@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent } from "react";
 import { Upload, Github, ExternalLink, X } from "lucide-react";
 import AppButton from "@/components/AppButton";
+import { supabase } from "@/lib/supabaseClient";
 
 interface FormData {
   title: string;
@@ -56,11 +57,75 @@ export default function AdminProjectsForm() {
     return true;
   };
 
-  const handleSubmit = () => {
-    if (!validateForm()) {
-      alert("Please fill in all required fields.");
+  const handleSubmit = async () => {
+  if (!validateForm()) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  try {
+    let imageUrl = null;
+
+    // 1️⃣ Upload image if user selected one
+    if (formData.image) {
+      const file = formData.image;
+      const fileName = `${Date.now()}-${file.name}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("project-images") // bucket name (create it in Supabase)
+        .upload(fileName, file);
+
+      if (uploadError) {
+        console.error(uploadError);
+        alert("Image upload failed.");
+        return;
+      }
+
+      // Generate public URL
+      const { data: publicUrlData } = supabase.storage
+        .from("project-images")
+        .getPublicUrl(fileName);
+
+      imageUrl = publicUrlData.publicUrl;
+    }
+
+    // 2️⃣ Insert new row into projects table
+    const { data, error } = await supabase
+      .from("projects")
+      .insert([
+        {
+          title: formData.title,
+          description: formData.description,
+          image_url: imageUrl,
+          github_url: formData.githubLink,
+          live_url: formData.previewLink,
+        },
+      ]);
+
+    if (error) {
+      console.error(error);
+      alert("Failed to add project.");
       return;
     }
+
+    alert("Project created successfully!");
+    console.log("Inserted:", data);
+
+    // Optional: Clear the form
+    setFormData({
+      title: "",
+      description: "",
+      githubLink: "",
+      previewLink: "",
+      image: null,
+    });
+    setImagePreview(null);
+
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong.");
+  }
+
 
     console.log("Form submitted:", formData);
     alert("Form submitted!");

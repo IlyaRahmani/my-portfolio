@@ -1,38 +1,55 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import AppButton from "@/components/AppButton";
 import { Github, ExternalLink } from "lucide-react";
 
 interface Project {
-  id: string;
+  id: number;
   title: string;
   description: string;
-  github: string;
-  preview: string;
-  image?: string;
+  github_url: string;
+  live_url: string;
+  image_url?: string | null;
 }
 
-const dummyProjects: Project[] = [
-  {
-    id: "1",
-    title: "My Portfolio",
-    description: "A modern portfolio built with Next.js, Tailwind, and supabase.",
-    github: "https://github.com/username/repo",
-    preview: "https://portfolio.com",
-  },
-  {
-    id: "2",
-    title: "Chat App",
-    description: "Real-time chat with WebSockets and Next.js.",
-    github: "https://github.com/username/chat",
-    preview: "https://chatapp.com",
-  },
-];
-
 export default function Projects() {
-  const handleDelete = (id: string) => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch all projects
+  const fetchProjects = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order("id", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching projects:", error);
+    } else {
+      setProjects(data);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const handleDelete = (id: number) => {
     alert("Delete project → " + id);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl">
+        Loading projects...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-6 md:p-12">
@@ -41,7 +58,7 @@ export default function Projects() {
       </h1>
 
       <div className="space-y-6">
-        {dummyProjects.map((project) => (
+        {projects.map((project) => (
           <div
             key={project.id}
             className="
@@ -54,7 +71,15 @@ export default function Projects() {
             {/* LEFT SECTION */}
             <div className="flex items-center gap-6 w-full md:w-auto">
               {/* PROJECT IMAGE */}
-              <div className="w-24 h-24 rounded-full bg-slate-300 dark:bg-slate-700 shrink-0"></div>
+              {project.image_url ? (
+                <img
+                  src={project.image_url}
+                  alt={project.title}
+                  className="w-24 h-24 rounded-full object-cover shadow-md"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-full bg-slate-300 dark:bg-slate-700 shrink-0"></div>
+              )}
 
               {/* TITLE + DESCRIPTION */}
               <div>
@@ -66,11 +91,11 @@ export default function Projects() {
             </div>
 
             {/* RIGHT SECTION */}
-            <div className="flex items-start md:items-end w-full md:w-auto gap-5">
+            <div className="md:flex items-start md:items-end w-full md:w-auto gap-5">
 
               {/* GitHub Link */}
               <a
-                href={project.github}
+                href={project.github_url}
                 target="_blank"
                 className="
                   flex items-center gap-2 text-blue-500 hover:text-blue-600 
@@ -83,7 +108,7 @@ export default function Projects() {
 
               {/* Live Preview */}
               <a
-                href={project.preview}
+                href={project.live_url}
                 target="_blank"
                 className="
                   flex items-center gap-2 text-green-500 hover:text-green-600 

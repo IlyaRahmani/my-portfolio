@@ -5,9 +5,9 @@ import Link from "next/link";
 export default async function AdminProjectsPage() {
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">Admin Projects</h1>
-      <p>Only admin (you) can see this page.</p>
+    <div >
+      <div className="p-6 md:flex gap-5">
+      <h1 className="py-3 px-6 mt-4 text-3xl font-bold">Admin Dashboard</h1>
       <Link href="/admin/projects-form">
           <AppButton
              type="primary"
@@ -16,6 +16,23 @@ export default async function AdminProjectsPage() {
               Create Project
             </AppButton>
       </Link>
+            <Link href="/">
+          <AppButton
+             type="secondary"
+             className=" py-3 px-6 mt-4"
+              >
+              Update Project
+            </AppButton>
+      </Link>
+            <Link href="/">
+          <AppButton
+             type="secondary"
+             className=" py-3 px-6 mt-4 bg-red-400 dark:bg-red-500"
+              >
+              Delete Project
+            </AppButton>
+      </Link>
+      </div>
 
       <Projects/>
 
